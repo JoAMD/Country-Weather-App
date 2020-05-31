@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/image1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="30dp"
+        android:src="@drawable/ic_launcher_background"
+        />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="220dp"
+        android:layout_height="100dp"
+        android:id="@+id/city_name"
+        app:layout_constraintStart_toEndOf="@+id/image1"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginVertical="30dp"
+        android:text="New Your City"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:onClick=""
+        />
+
+</android.support.constraint.ConstraintLayout>
