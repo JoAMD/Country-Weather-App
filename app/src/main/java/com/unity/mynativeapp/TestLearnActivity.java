@@ -3,6 +3,8 @@ package com.unity.mynativeapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,9 +25,16 @@ public class TestLearnActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_learn);
+
+        //CountriesNameApiCall();
+
     }
 
-    private void CountriesNameApiCall(){
+    public void CountriesNameApiCall(View v){
+
+        //For Debug
+        TextView textView2 = findViewById(R.id.DebugTextView);
+
         URL url;
         try{
             url = new URL(getResources().getString(R.string.rest_api_countries_name));
@@ -60,22 +69,37 @@ public class TestLearnActivity extends AppCompatActivity {
 
                 }
             };
+
+            conn.setDoOutput(true);
+
             String response = conn.getResponseMessage();
 
             JSONArray countries = new JSONArray(response).getJSONArray(0);
 
+            String countryName = countries.getJSONObject(0).getString("name");
+
+            TextView textView = findViewById(R.id.city_name);
+            textView.setText(countryName);
+
+            CallNextActivity(countryName);
+
         }
         catch (MalformedURLException e){
+            textView2.setText(textView2.getText() + e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
+            textView2.setText(textView2.getText() + e.getMessage());
             e.printStackTrace();
         } catch (JSONException e) {
+            textView2.setText(textView2.getText() + e.getMessage());
             e.printStackTrace();
         }
     }
 
     private void CallNextActivity(String countryName){
-        //Intent intent = new Intent(getApplicationContext(), )
+        Intent intent = new Intent(getApplicationContext(), CountryWeatherActivity.class);
+        intent.putExtra("country name", countryName);
+        startActivity(intent);
     }
 
 }
