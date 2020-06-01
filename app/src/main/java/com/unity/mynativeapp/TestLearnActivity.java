@@ -1,13 +1,23 @@
 package com.unity.mynativeapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,7 +31,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -59,7 +68,8 @@ public class TestLearnActivity extends AppCompatActivity{
 
             try {
                 JSONArray countriesJSONArr = new JSONArray(resultString);
-                int increment = (countriesJSONArr.length() - 1) / 50;
+//                int increment = (countriesJSONArr.length() - 1) / 50;
+                Log.d("nm", "no of countries = " + countriesJSONArr.length());
                 for(int i = 0; i < countriesJSONArr.length(); i++){
 //                    if(i*10>countriesJSONArr.length()) i=i/10+1;
                     countries = countriesJSONArr.getJSONObject(i);
@@ -118,6 +128,68 @@ public class TestLearnActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
+    private class CustomArrayAdapter extends ArrayAdapter<String> {
+
+        private ArrayList<String> objects;
+        private int textViewResourceId;
+        private int layoutResource;
+        private Context context;
+        int count = 0;
+
+        public CustomArrayAdapter(@NonNull Context context, int resource, int textViewResourceId, @NonNull ArrayList<String> objects) {
+            super(context, resource, textViewResourceId, objects);
+            this.objects = new ArrayList<>();
+            this.context = context;
+            this.layoutResource = resource;
+            this.textViewResourceId = textViewResourceId;
+            this.objects.addAll(objects);
+        }
+
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
+            if(convertView == null){
+                count++;
+                Log.d("nm", "inflating again " + count);
+                LayoutInflater inflater = LayoutInflater.from(context);
+                convertView = inflater.inflate(layoutResource, parent, false);
+            }
+
+            TextView textView = convertView.findViewById(textViewResourceId);
+            textView.setText(objects.get(position));
+
+            ImageView imageView = convertView.findViewById(R.id.image1);
+//            imageView.setColorFilter((int)new Color().red());
+            //img view set too
+
+            return convertView;
+
+        }
+    }
+    private class CustomListAdapter extends BaseAdapter{
+        @Override
+        public int getCount() {
+            return 0;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return null;
+        }
+    }
 
     private class ListPopulate{
         ListView listView;
@@ -137,6 +209,19 @@ public class TestLearnActivity extends AppCompatActivity{
         }
 
         private void ListPopulateHelper(){
+//            ArrayAdapterHelper();
+            CustomListAdapterHelper();
+        }
+
+        private void CustomListAdapterHelper(){
+
+            CustomArrayAdapter adapter = new CustomArrayAdapter(getApplicationContext(), R.layout.content_list_view_item
+                                                                , R.id.city_name, list);
+            listView.setAdapter(adapter);
+
+        }
+
+        private void ArrayAdapterHelper(){
             ArrayAdapter adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.simple_list_view_item, list);
             listView.setAdapter(adapter);
         }
