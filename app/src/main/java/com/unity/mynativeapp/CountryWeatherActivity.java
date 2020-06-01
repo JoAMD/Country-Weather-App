@@ -1,9 +1,14 @@
 package com.unity.mynativeapp;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,14 +29,38 @@ public class CountryWeatherActivity extends AppCompatActivity {
 
         try {
 
-            URL url = new URL(R.string.weather_api_call_part1 + intentCountryName + R.string.weather_api_call_part2);
-            new TestLearnActivity.RetrieveJSONData().execute(url); //how to handle onPostExecute call... use top level class means still same..
+            String urlString = String.format("%s%s%s%s", getString(R.string.weather_api_call_part1), intentCountryName
+                                                       , getString(R.string.weather_api_call_part2), BuildConfig.OPENWEATHER_KEY);
+
+            Log.d("nm", "urlString = " + urlString);
+            URL url = new URL(urlString);
+
+            String resultString = new TestLearnActivity.RetrieveJSONData(false).execute(url).get(); //how to handle onPostExecute call... use top level class means still same..
             // somehow send class details to static class?
+
+            String weatherRes = null;
+            String weatherDesc = null;
+            try {
+                JSONArray arr = new JSONObject(resultString).getJSONArray("weather");
+                Log.d("nm", arr.toString());
+                JSONObject weather = arr.getJSONObject(0);
+                Log.d("nm", weather.toString());
+                weatherRes = weather.getString("main");
+                weatherDesc = weather.getString("description");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            Log.d("nm", weatherRes);
+            Log.d("nm", weatherDesc);
+//            textView.setLines(3);
+            textView.setText(String.format("%s\n\n%s\n%s", intentCountryName, weatherRes, weatherDesc));
+
+            Log.d("nm", textView.getText().toString());
 
         } catch (Exception e){
             e.printStackTrace();
         }
-
-        textView.setText(intentCountryName);
     }
 }

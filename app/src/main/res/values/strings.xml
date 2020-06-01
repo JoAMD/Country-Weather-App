@@ -6,7 +6,7 @@
 
 <!--    <string name="geocoding_api_call_part1">https://api.opencagedata.com/geocode/v1/json?q=</string>-->
 <!--    <string name="geocoding_api_call_part2">&amp;key=6adf47854a38485cb339d1ee9e5fe97b</string>-->
-    <string name="weather_api_call_part1">api.openweathermap.org/data/2.5/weather?q=</string>
-    <string name="weather_api_call_part2">&amp;appid={your api key}</string>
+    <string name="weather_api_call_part1">http://api.openweathermap.org/data/2.5/weather?q=</string>
+    <string name="weather_api_call_part2">&amp;appid=</string>
     <string name="rest_api_countries_name">https://restcountries.eu/rest/v2/name/A</string>
 </resources>

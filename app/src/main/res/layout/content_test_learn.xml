@@ -27,7 +27,7 @@
         android:text="New Your City"
         android:textSize="30sp"
         android:textAlignment="center"
-        android:onClick="CountriesNameApiCall"
+        android:onClick="CallNextActivity"
         />
 
 </android.support.constraint.ConstraintLayout>
