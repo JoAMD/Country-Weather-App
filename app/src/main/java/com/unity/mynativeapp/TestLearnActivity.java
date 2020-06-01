@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -17,6 +20,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -36,7 +41,7 @@ public class TestLearnActivity extends AppCompatActivity{
     public void CountriesNameApiCall(){
 
         //For Debug
-        TextView textView2 = findViewById(R.id.DebugTextView);
+//        TextView textView2 = findViewById(R.id.DebugTextView);
 
         URL url;
         try{
@@ -45,16 +50,38 @@ public class TestLearnActivity extends AppCompatActivity{
             String resultString = new RetrieveJSONData(true).execute(url).get();
 
             JSONObject countries;
+
+            ArrayList<String> countriesList = new ArrayList<>();
+
+//            for (int i = 0; i < 50; ++i){
+//                countriesArr[i] = "India" + i;
+//            }
+
             try {
-                countries = new JSONArray(resultString).getJSONObject(0);
-                countryName = countries.getString("name");
+                JSONArray countriesJSONArr = new JSONArray(resultString);
+                int increment = (countriesJSONArr.length() - 1) / 50;
+                for(int i = 0; i < countriesJSONArr.length(); i++){
+//                    if(i*10>countriesJSONArr.length()) i=i/10+1;
+                    countries = countriesJSONArr.getJSONObject(i);
+                    countryName = countries.getString("name");
+                    countriesList.add(countryName);
+                    Log.d("nm", "country name in act 1 = " + countryName);
+                }
+//                if(j != 50){
+//                    countries = countriesJSONArr.getJSONObject(countriesJSONArr.length() - 1);
+//                    countryName = countries.getString("name");
+//                    countriesList[49] = countryName;
+//                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            Log.d("nm", "country name in act 1 = " + countryName);
 
-            TextView textView = findViewById(R.id.city_name);
-            textView.setText(countryName);
+
+            ListPopulate listPopulate = new ListPopulate(countriesList);
+            listPopulate.SetListView((ListView) findViewById(R.id.countriesList));
+            listPopulate.ListPopulateHelper();
+            listPopulate.ListOnClick();
+
         }
         catch (Exception e){
             e.printStackTrace();
@@ -70,7 +97,61 @@ public class TestLearnActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
+    public void CallNextActivity(String countryName){
 
+        //Replace spaces with %20
+        String countryNameNew = null;
+        if(countryName.contains(" ")){
+            String[] strSlices = countryName.split(" ");
+            StringBuilder countryNameBuilder = new StringBuilder(strSlices[0]);
+            for (int i = 1; i < strSlices.length; ++i){
+                countryNameBuilder.append("%20").append(strSlices[i]);
+            }
+            countryNameNew = countryNameBuilder.toString();
+        }
+
+
+        //CallNext Activity
+        Intent intent = new Intent(getApplicationContext(), CountryWeatherActivity.class);
+        intent.putExtra("countryName", countryName);
+        intent.putExtra("countryNameNew", countryNameNew);
+        startActivity(intent);
+    }
+
+
+    private class ListPopulate{
+        ListView listView;
+        private String[] countriesArr;
+        ArrayList<String> list;
+
+        public ListPopulate(String[] countriesArr) {
+            this.countriesArr = countriesArr;
+        }
+
+        public ListPopulate(ArrayList<String> list) {
+            this.list = list;
+        }
+
+        private void SetListView(ListView listView){
+            this.listView = listView;
+        }
+
+        private void ListPopulateHelper(){
+            ArrayAdapter adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.simple_list_view_item, list);
+            listView.setAdapter(adapter);
+        }
+
+        private void ListOnClick(){
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String str = listView.getItemAtPosition(position).toString();
+                    CallNextActivity(str);
+                    Log.d("nm", "calling item click => " + str);
+                }
+            });
+        }
+    }
 
 
     // try making it into static as well as top level class for practice

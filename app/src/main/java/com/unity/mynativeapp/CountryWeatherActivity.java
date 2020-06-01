@@ -24,12 +24,13 @@ public class CountryWeatherActivity extends AppCompatActivity {
 
         TextView textView = findViewById(R.id.countryName);
         String intentCountryName = getIntent().getStringExtra("countryName");
+        String intentCountryNameNew = getIntent().getStringExtra("countryNameNew");
         Log.d("nm", "country name in new activity = " + intentCountryName);
 
 
         try {
 
-            String urlString = String.format("%s%s%s%s", getString(R.string.weather_api_call_part1), intentCountryName
+            String urlString = String.format("%s%s%s%s", getString(R.string.weather_api_call_part1), intentCountryNameNew
                                                        , getString(R.string.weather_api_call_part2), BuildConfig.OPENWEATHER_KEY);
 
             Log.d("nm", "urlString = " + urlString);
