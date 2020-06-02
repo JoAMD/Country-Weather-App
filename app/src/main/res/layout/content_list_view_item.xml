@@ -12,6 +12,9 @@
         app:layout_constraintTop_toTopOf="parent"
         android:paddingHorizontal="30dp"
         android:paddingVertical="30dp"
+        android:maxHeight="200dp"
+        android:maxWidth="200dp"
+        android:adjustViewBounds="true"
         android:src="@drawable/ic_launcher_background"
         />
 
@@ -26,8 +29,6 @@
         android:layout_margin="30dp"
         android:text="New Your City"
         android:textSize="30sp"
-        android:textAlignment="center"
-        android:onClick="CallNextActivity"
-        />
+        android:textAlignment="center"  />
 
 </android.support.constraint.ConstraintLayout>

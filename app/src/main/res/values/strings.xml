@@ -9,4 +9,6 @@
     <string name="weather_api_call_part1">http://api.openweathermap.org/data/2.5/weather?q=</string>
     <string name="weather_api_call_part2">&amp;appid=</string>
     <string name="rest_api_countries_name">https://restcountries.eu/rest/v2/name/A</string>
+
+    <string name="teleport_urban_areas">https://api.teleport.org/api/urban_areas/</string>
 </resources>

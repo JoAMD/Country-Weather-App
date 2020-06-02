@@ -1,6 +1,5 @@
 package com.unity.mynativeapp;
 
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,10 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
 import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class CountryWeatherActivity extends AppCompatActivity {
 
@@ -26,6 +22,7 @@ public class CountryWeatherActivity extends AppCompatActivity {
         String intentCountryName = getIntent().getStringExtra("countryName");
         String intentCountryNameNew = getIntent().getStringExtra("countryNameNew");
         Log.d("nm", "country name in new activity = " + intentCountryName);
+        Log.d("nm", "country name New in new activity = " + intentCountryNameNew);
 
 
         try {
@@ -36,7 +33,7 @@ public class CountryWeatherActivity extends AppCompatActivity {
             Log.d("nm", "urlString = " + urlString);
             URL url = new URL(urlString);
 
-            String resultString = new TestLearnActivity.RetrieveJSONData(false).execute(url).get(); //how to handle onPostExecute call... use top level class means still same..
+            String resultString = new RetrieveJSONData(false).execute(url).get(); //how to handle onPostExecute call... use top level class means still same..
             // somehow send class details to static class?
 
             String weatherRes = null;
